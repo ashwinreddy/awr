@@ -310,6 +310,7 @@ class RLAgent(abc.ABC):
         return avg_return, num_episodes
 
     def _rollout_path(self, test):
+        print("collecting sample")
         path = rl_path.RLPath()
 
         s = self._env.reset()
@@ -319,7 +320,12 @@ class RLAgent(abc.ABC):
         done = False
         self._env._elapsed_steps = 0
         while (not done) and self._env._elapsed_steps <= self._env._max_episode_steps:
-            a, logp = self.sample_action(s, test)
+            try:
+                a, logp = self.sample_action(s, test)
+            except Exception as e:
+                print(e)
+                continue
+
             s, r, done, info = self._step_env(a)
             s = np.array(s)
             

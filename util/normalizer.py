@@ -113,6 +113,8 @@ class Normalizer(object):
         return
 
     def normalize(self, x):
+        if self._std == 0:
+            self._std = 0.001
         norm_x = (x - self._mean) / self._std
         norm_x = np.clip(norm_x, -self._clip, self._clip)
         return norm_x
