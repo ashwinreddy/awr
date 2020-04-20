@@ -317,7 +317,8 @@ class RLAgent(abc.ABC):
         path.states.append(s)
 
         done = False
-        while not done:
+        self._env._elapsed_steps = 0
+        while (not done) and self._env._elapsed_steps <= self._env._max_episode_steps:
             a, logp = self.sample_action(s, test)
             s, r, done, info = self._step_env(a)
             s = np.array(s)
@@ -329,6 +330,8 @@ class RLAgent(abc.ABC):
 
             if (self.visualize):
                 self.render_env()
+
+            self._env._elapsed_steps += 1
 
         path.terminate = self._check_env_termination()
 
