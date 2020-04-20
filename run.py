@@ -8,6 +8,13 @@ import tensorflow as tf
 import awr_configs
 import learning.awr_agent as awr_agent
 
+import multiworld
+
+from multiworld.core.image_env import ImageEnv
+from multiworld.core.flat_goal_env import FlatGoalEnv
+
+multiworld.register_all_envs()
+
 arg_parser = None
 
 def parse_args(args):
@@ -39,6 +46,10 @@ def enable_gpus(gpu_str):
 def build_env(env_id):
     assert(env_id is not ""), "Unspecified environment."
     env = gym.make(env_id)
+    if env_id == "SawyerPushAndReachEnvEasy-v0":
+        env = FlatGoalEnv(ImageEnv(env, transpose=True), obs_keys=['image_observation'], append_goal_to_obs=True)
+        env._max_episode_steps = 50
+        
     return env
 
 def build_agent(env):
