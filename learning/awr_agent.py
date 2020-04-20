@@ -196,14 +196,14 @@ class AWRAgent(rl_agent.RLAgent):
         return input_tfs
 
     def _build_net_actor(self, input_tfs, reuse=False):
-        h = net_util.build_fc_net(input_tfs=input_tfs, layers=self._actor_net_layers, reuse=reuse)
+        h = net_util.build_conv_net(input_tfs=input_tfs, layers=self._actor_net_layers, reuse=reuse)
         norm_a_pd_tf = self._build_action_pd(input_tf=h, init_output_scale=self._actor_init_output_scale,
                                              reuse=reuse)
         return norm_a_pd_tf
 
     def _build_net_critic(self, input_tfs, reuse=False):
         out_size = 1
-        h = net_util.build_fc_net(input_tfs=input_tfs, layers=self._critic_net_layers, reuse=reuse)
+        h = net_util.build_conv_net(input_tfs=input_tfs, layers=self._critic_net_layers, reuse=reuse)
         norm_val_tf = tf.layers.dense(inputs=h, units=out_size, activation=None,
                                 kernel_initializer=tf.contrib.layers.xavier_initializer(),
                                 reuse=reuse);
